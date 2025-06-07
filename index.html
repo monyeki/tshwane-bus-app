@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tshwane Bus Routes Map</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map { height: 100vh; }
+    #routeSelector {
+      position: absolute;
+      top: 10px;
+      left: 50px;
+      z-index: 1000;
+      background: white;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div id="routeSelector">
+    <label for="routes">Select a Route:</label>
+    <select id="routes">
+      <option value="">--Choose a route--</option>
+      <option value="routes/route1.geojson">Route 1</option>
+      <option value="routes/route2.geojson">Route 2</option>
+    </select>
+  </div>
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script>
+    var map = L.map('map').setView([-25.746111, 28.188056], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    var routeLayer;
+    function loadRoute(url) {
+      if (routeLayer) {
+        map.removeLayer(routeLayer);
+      }
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          routeLayer = L.geoJSON(data, {
+            style: { color: 'blue', weight: 4 }
+          }).addTo(map);
+          map.fitBounds(routeLayer.getBounds());
+        })
+        .catch(error => {
+          console.error('Error loading route:', error);
+        });
+    }
+
+    document.getElementById('routes').addEventListener('change', function() {
+      var selectedRoute = this.value;
+      if (selectedRoute) {
+        loadRoute(selectedRoute);
+      }
+    });
+  </script>
+</body>
+</html>

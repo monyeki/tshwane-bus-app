@@ -1,0 +1,28 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Route 1"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            28.188056,
+            -25.746111
+          ],
+          [
+            28.2,
+            -25.75
+          ],
+          [
+            28.21,
+            -25.755
+          ]
+        ]
+      }
+    }
+  ]
+}
